@@ -34,6 +34,13 @@ class Handler extends ExceptionHandler
      */
     public function register()
     {
+        $this->renderable(function (TokenMismatchException $e, $request) {
+            // exceção de token CSRF
+            return back()
+                ->withInput($request->except('password', 'password_confirmation'))
+                ->withErrors(['token' => 'Sua sessão expirou! Por favor, tente enviar o formulário novamente.']);
+        });
+
         $this->reportable(function (Throwable $e) {
             //
         });
